@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements FetchData.OnDownl
     @Override
     public void onDownloadComplete(String data, DownloadStatus status){
         if(status==DownloadStatus.OK){
-            Log.d(TAG, "onDownloadComplete: data is "+data);
+            Log.d(TAG, "onDownloadComplete: data is " + data);
         } else {
             Log.e(TAG, "onDownloadComplete: failed with status"+status);
         }
