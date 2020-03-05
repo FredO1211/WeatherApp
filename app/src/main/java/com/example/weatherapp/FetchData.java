@@ -5,7 +5,6 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -26,6 +25,17 @@ public class FetchData extends AsyncTask<String,Void,String> {
     public FetchData(OnDownloadComplete callback) {
         this.downloadStatus=DownloadStatus.IDLE;
         this.callback = callback;
+    }
+
+    void runInSameThread(String s){
+        Log.d(TAG, "runInSameThread: starts");
+
+//        onPostExecute(doInBackground(s));
+        if(callback !=null){
+            callback.onDownloadComplete(doInBackground(s),downloadStatus);
+        }
+
+        Log.d(TAG, "runInSameThread: ends");
     }
 
     @Override
@@ -88,4 +98,5 @@ public class FetchData extends AsyncTask<String,Void,String> {
         downloadStatus=DownloadStatus.FAILED_OR_EMPTY;
         return null;
     }
+
 }
