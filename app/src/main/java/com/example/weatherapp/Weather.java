@@ -1,7 +1,5 @@
 package com.example.weatherapp;
 
-import android.support.annotation.NonNull;
-
 class Weather {
     private String city;
     private String weatherType;

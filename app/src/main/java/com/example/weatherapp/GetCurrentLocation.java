@@ -1,58 +1,52 @@
 package com.example.weatherapp;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class GetCurrentLocation extends Activity implements LocationListener {
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+public class GetCurrentLocation extends AsyncTask<Void,Void,Coordinates>{
     private static final String TAG = "GetCurrentLocation";
-
-    protected LocationManager locationManager;
+    private FusedLocationProviderClient fusedLocationClient;
     private Coordinates coordinates;
+    private Activity activity;
 
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged: starts");
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    private final GetWeatherJsonData.OnDataAvailable callback;
 
-        coordinates=new Coordinates(location.getLatitude(),location.getLongitude());
-        Log.d(TAG, "onLocationChanged: ends");
+    public GetCurrentLocation(Activity activity, GetWeatherJsonData.OnDataAvailable callback) {
+        this.activity = activity;
+        this.callback = callback;
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    protected Coordinates doInBackground(Void... voids) {
+        Log.d(TAG, "doInBackground: start");
 
-    }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
 
-    @Override
-    public void onProviderEnabled(String provider) {
-        Log.d("Latitude","status");
-    }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if(location!=null){
+                            coordinates = new Coordinates(location.getLatitude(),location.getLongitude());
+                            Log.d(TAG, "onSuccess: " +coordinates.toString());
+                            GetWeatherJsonData getWeatherJsonData = new GetWeatherJsonData(callback,"https://api.openweathermap.org/data/2.5/weather",location.getLatitude(),location.getLongitude(),"da04e8d884c2338e773b27e31ebd3e93","metric");
+                            getWeatherJsonData.execute();
+                        }
+                        else {
+                            Log.d(TAG, "onSuccess: unsuccessful");
+                        }
+                    }
+                });
 
-    @Override
-    public void onProviderDisabled(String provider) {
-        Log.d("Latitude","disable");
-    }
+        Log.d(TAG, "doInBackground: stop");
 
-    public Coordinates getCoordinates() {
         return coordinates;
     }
+
 }

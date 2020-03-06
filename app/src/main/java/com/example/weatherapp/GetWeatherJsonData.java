@@ -10,8 +10,6 @@ import org.json.JSONObject;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 class GetWeatherJsonData extends AsyncTask<String,Void,Weather> implements FetchData.OnDownloadComplete {
     private static final String TAG = "GetWeatherJsonData";
@@ -30,10 +28,10 @@ class GetWeatherJsonData extends AsyncTask<String,Void,Weather> implements Fetch
         void onDataAvailable(Weather weather, DownloadStatus status);
     }
 
-    public GetWeatherJsonData(OnDataAvailable callback, String baseURL, double latitude, double longitude, String apiId, String units ) {
+    public GetWeatherJsonData(OnDataAvailable callback, String baseURL, Double latitude, Double longitude, String apiId, String units ) {
+        this.latitude=latitude;
+        this.longitude=longitude;
         this.baseURL = baseURL;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.apiId = apiId;
         this.units = units;
 
@@ -64,6 +62,7 @@ class GetWeatherJsonData extends AsyncTask<String,Void,Weather> implements Fetch
     @Override
     protected Weather doInBackground(String... params) {
         Log.d(TAG, "doInBackground: starts");
+
         String destinationUri = createUri(latitude,longitude,apiId,units);
 
         FetchData fetchData = new FetchData(this);
