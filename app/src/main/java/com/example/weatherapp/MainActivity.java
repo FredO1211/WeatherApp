@@ -1,10 +1,13 @@
 package com.example.weatherapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
     private static TextView cityTextView;
     private static TextView weatherTextView;
     private static ImageView backgroundImageView;
+    private static CardView findCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +32,20 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
         Log.d(TAG, "onCreate: before request");
         requestPermission();
 
+        final Intent intent=new Intent(this, FindCityActivity.class);
+
         temperatureTextView = findViewById(R.id.temperatureTextView);
         cityTextView = findViewById(R.id.cityTextView);
         weatherTextView = findViewById(R.id.weatherTextView);
         backgroundImageView = findViewById(R.id.backgroundImageView);
+        findCardView = findViewById(R.id.findCardView);
 
+        findCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
 
         GetCurrentLocation getCurrentLocation = new GetCurrentLocation(this,this);
         getCurrentLocation.execute();
@@ -63,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
             Context context = getApplicationContext();
             String text = "Current weather is not available now. \nPlease try again later.";
             int duration = Toast.LENGTH_SHORT;
-
+            Log.d(TAG, "onDataAvailable: Wrong data");
             Toast toast = Toast.makeText(context,text,duration);
             toast.show();
         }

@@ -73,12 +73,10 @@ class GetWeatherJsonData extends AsyncTask<String,Void,Weather> implements Fetch
 
     private String createUri(double latitude, double longitude, String apiId, String units){
         Log.d(TAG, "createUri: starts");
-        DecimalFormat df2 = new DecimalFormat("#.##");
-        df2.setRoundingMode(RoundingMode.UP);
 
         Uri uri=Uri.parse(baseURL).buildUpon()
-                .appendQueryParameter("lat",df2.format(latitude))
-                .appendQueryParameter("lon",df2.format(longitude))
+                .appendQueryParameter("lat",String.valueOf(latitude))
+                .appendQueryParameter("lon",String.valueOf(longitude))
                 .appendQueryParameter("appid",apiId)
                 .appendQueryParameter("units",units)
                 .build();
