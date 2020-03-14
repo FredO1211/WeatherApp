@@ -35,7 +35,11 @@ public class GetCurrentLocation extends AsyncTask<Void,Void,Coordinates>{
                         if(location!=null){
                             coordinates = new Coordinates(location.getLatitude(),location.getLongitude());
                             Log.d(TAG, "onSuccess: " +coordinates.toString());
-                            GetWeatherJsonData getWeatherJsonData = new GetWeatherJsonData(callback,"https://api.openweathermap.org/data/2.5/weather",location.getLatitude(),location.getLongitude(),"da04e8d884c2338e773b27e31ebd3e93","metric");
+                            GetWeatherJsonData getWeatherJsonData = new GetWeatherJsonData(callback,
+                                    "https://api.openweathermap.org/data/2.5/weather",
+                                    location.getLatitude(),location.getLongitude(),
+                                    "da04e8d884c2338e773b27e31ebd3e93",
+                                    "metric");
                             getWeatherJsonData.execute();
                         }
                         else {

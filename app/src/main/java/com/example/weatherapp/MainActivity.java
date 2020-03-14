@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements GetWeatherJsonData.OnDataAvailable {
@@ -59,8 +61,9 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
     }
 
     @Override
-    public void onDataAvailable(Weather data, DownloadStatus status){
+    public void onDataAvailable(ArrayList<Weather> weathers, DownloadStatus status){
         try {
+            Weather data=weathers.get(0);
             if (status == DownloadStatus.OK) {
                 Log.d(TAG, "onDataAvailable: data is " + data);
                 cityTextView.setText(data.getCity());
