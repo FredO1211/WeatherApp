@@ -106,7 +106,7 @@ private GetWeatherJsonData.OnDataAvailable callback;
             icon.setImageResource(R.drawable.storm);
         }
         else if(weather.getWeatherType().equals("Snow")){
-            icon.setImageResource(R.drawable.storm);
+            icon.setImageResource(R.drawable.snow);
         }
         else {
             icon.setImageResource(R.drawable.sunny);
