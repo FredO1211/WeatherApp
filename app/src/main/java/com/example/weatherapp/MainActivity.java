@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
     private static TextView weatherTextView;
     private static ImageView backgroundImageView;
     private static CardView findCardView;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
         Log.d(TAG, "onCreate: before request");
         requestPermission();
 
+        db=new Database(this);
+
         final Intent intent=new Intent(this, FindCityActivity.class);
 
         temperatureTextView = findViewById(R.id.temperatureTextView);
@@ -41,6 +44,15 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
         weatherTextView = findViewById(R.id.weatherTextView);
         backgroundImageView = findViewById(R.id.backgroundImageView);
         findCardView = findViewById(R.id.findCardView);
+
+        if(db.ifRecordsExist()) {
+            temperatureTextView.setText(db.getLastTemperature() + "°C");
+            cityTextView.setText(db.getLastCity());
+            weatherTextView.setText(db.getLastWeatherType());
+
+            setBackgroundImageView(db.getLastWeatherType());
+        }
+
 
         findCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
             Weather data=weathers.get(0);
             if (status == DownloadStatus.OK) {
                 Log.d(TAG, "onDataAvailable: data is " + data);
+                db.addWeather(data.getTemperature(),data.getCity(),data.getWeatherType());
                 cityTextView.setText(data.getCity());
                 temperatureTextView.setText(data.getTemperature() + "°C");
                 weatherTextView.setText(data.getWeatherType());
@@ -76,12 +89,15 @@ public class MainActivity extends AppCompatActivity implements GetWeatherJsonDat
                 Log.e(TAG, "onDataAvailable: failed with status" + status);
             }
         }catch (Exception e){
+
             Context context = getApplicationContext();
             String text = "Current weather is not available now. \nPlease try again later.";
             int duration = Toast.LENGTH_SHORT;
             Log.d(TAG, "onDataAvailable: Wrong data");
             Toast toast = Toast.makeText(context,text,duration);
             toast.show();
+
+
         }
 
     }

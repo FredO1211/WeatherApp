@@ -1,7 +1,6 @@
 package com.example.weatherapp;
 
 import android.content.Context;
-import android.inputmethodservice.Keyboard;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -68,7 +67,7 @@ private GetWeatherJsonData.OnDataAvailable callback;
         });
     }
 
-    public void setVisble(){
+    public void setVisible(){
         currentTemperatureTV.setVisibility(View.VISIBLE);
         tomorrowTemperatureTV.setVisibility(View.VISIBLE);
         dATTemperatureTV.setVisibility(View.VISIBLE);
@@ -130,7 +129,7 @@ private GetWeatherJsonData.OnDataAvailable callback;
                     }
                     i++;
                 }
-                setVisble();
+                setVisible();
             }
         }catch (Exception e){
             Context context = getApplicationContext();
