@@ -47,16 +47,6 @@ class GetWeatherJsonData extends AsyncTask<Void,Void,Void> implements FetchData.
         this.callback = callback;
     }
 
-    void executeOnSameThread(){
-        Log.d(TAG, "executeOnSameThread: starts");
-        runningOnSameThread=true;
-        String destinationUri=createUri(latitude,longitude,apiId,units);
-
-        FetchData fetchData = new FetchData(this);
-        fetchData.execute(destinationUri);
-        Log.d(TAG, "executeOnSameThread: ends");
-    }
-
     @Override
     protected void onPostExecute(Void aVoid) {
         Log.d(TAG, "onPostExecute: starts");
